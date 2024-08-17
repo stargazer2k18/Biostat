@@ -1,0 +1,250 @@
+---
+title: "Lungs Data - EDA and Data Visualization in R"
+description: |
+  Explored and visualized lungs data in R, performing EDA to uncover patterns and trends. Utilized R packages for effective data visualization, providing insights into respiratory health indicators.
+author:
+  - name: Prasanth Kumar
+    url: https://www.linkedin.com/in/prasanthkumar28/
+date: 08-17-2024
+output:
+  distill::distill_article:
+    self_contained: false
+    df_print: kable
+---
+
+
+## Setup Chunks in RMarkdown
+
+```{r Chunk Setup, include=FALSE}
+knitr::opts_chunk$set(comment = "", message = FALSE, warning =FALSE,
+                      echo = FALSE)
+```
+
+## Loading Required Libraries
+
+ Loading several essential libraries, including "tidyverse", "highcharter". These libraries offer diverse functionalities for data manipulation, visualization, and reporting.
+
+ And also we need the "survival" package for the NCCTG Lung Cancer data set in it.
+ and to save the cleaned data to the directory we need "openxlsx" package 
+ 
+```{r Library}
+library(tidyverse)
+library(highcharter)
+library(survival)
+library(openxlsx)
+library(knitr)
+```
+
+## Data Description 
+
+### NCCTG Lung Cancer Data
+
+Survival in patients with advanced lung cancer from the North Central Cancer Treatment Group. Performance scores rate how well the patient can perform usual daily activities.
+
+
+### Format 
+
+inst:	Institution code.  
+time:	Survival time in days.  
+status:	censoring status 1=censored, 2=dead.  
+age:	Age in years.  
+sex:	Male=1 Female=2.  
+ph.ecog:	ECOG performance score as rated by the physician. 0=asymptomatic, 1= symptomatic but completely ambulatory, 2= in bed <50% of the day, 3= in bed > 50% of the day but not bedbound, 4 = bedbound.  
+ph.karno:	Karnofsky performance score (bad=0-good=100) rated by physician.    
+pat.karno:	Karnofsky performance score as rated by patient.    
+meal.cal:	Calories consumed at meals.  
+wt.loss:	Weight loss in last six months (pounds).  
+
+```{r Lung Dataset, rows.print = 10, pages.print = 5}
+lung_data <- lung 
+kable(head(lung_data))
+```
+
+#### Dimensions
+
+The dataset consists of `r nrow(lung_data)` rows and `r ncol(lung_data)` columns.
+
+```{r Dimensions}
+dim(lung_data)
+```
+
+#### Names in the dataset
+
+The names of the columns in the dataset are:
+
+```{r Names}
+names(lung_data)
+```
+
+#### Data Types
+
+The data types of the columns are as follows: 
+
+```{r Data Types}
+sapply(lung_data, typeof)
+```
+
+#### Data Summary
+  
+A summary of the dataset provides descriptive statistics for numerical variables, including measures such as mean, median, minimum, maximum, and quartiles. For categorical variables, it displays their class, length, and mode. This overview helps understand the central tendencies and distributions of numerical data, as well as the characteristics of categorical variables.    
+
+```{r Stats}
+summary(lung_data)
+```
+
+#### Missing Values
+
+The dataset contains missing values in columns:
+
+```{r Null Values}
+colSums(is.na(lung_data))
+```
+ 
+ The Lung data set has some missing in it.
+ 
+## Data Cleaning
+ 
+#### Removing NA in the Dataset
+
+```{r Remove NA values}
+# Remove rows with NA values
+lung_data <- na.omit(lung_data)
+
+colSums(is.na(lung_data))
+```
+
+
+### Quick Summary
+
+```{r Q.Summary}
+summary(lung_data)
+```
+
+### Identifying Unique Values
+
+To understand the diversity and uniqueness of data, we will analyze the dataset to identify all unique values across various columns. This process will provide insights into the distinct categories and variations present in the dataset.
+
+```{r Unique Values}
+sapply(lung_data, function(x) length(unique(x)))
+```
+
+## Data Visualization
+
+#### Distribution of Sex - Bar Chart
+
+```{r Bar Chart - Sex}
+lung_data %>% 
+  mutate(sex = ifelse(sex == 1, "Male", "Female")) %>% 
+  count(sex) %>% 
+  hchart("pie", hcaes(x = "sex", y = "n")) %>% 
+  hc_title(text = "Distribution of Sex") %>%
+  hc_colors(colors = c("#1f77b4", "#ff7f0e")) %>% 
+  hc_add_theme(hc_theme_google())
+```
+
+#### Distribution of Status
+
+```{r Bar Chart - Status}
+lung_data %>% 
+  mutate(status = ifelse(status == 2, "Dead", "Censored")) %>% 
+  count(status) %>% 
+  hchart("pie", hcaes(x = "status", y = "n")) %>% 
+  hc_title(text = "Distribution of Status") %>%
+  hc_colors(colors = c("seagreen","maroon")) %>% 
+  hc_add_theme(hc_theme_google())
+```
+
+### Distribution of Sex & ECOG Performance Score by Physician
+
+```{r Grouped Bar Chart - Sex & ECOG Performance Score}
+lung_data %>%
+  mutate(sex = ifelse(sex == 1, "Male", "Female")) %>% 
+  mutate(ph.ecog = ifelse(ph.ecog == 0, "Fully active", ifelse(ph.ecog == 1, "Light work", ifelse(ph.ecog == 2, "Self-care capable", ifelse(ph.ecog == 3, "Limited Self-care", "Completely disabled"))))) %>% 
+  count(sex, ph.ecog) %>% 
+  hchart("bar", hcaes(x = sex, y = "n",
+                      group = ph.ecog)) %>%
+  hc_title(text = "Distribution of Sex & ECOG Performance Score") %>%
+  hc_add_theme(hc_theme_ggplot2())
+```
+
+#### Distribution of Age
+
+```{r Histogram - Age }
+lung_data %>%
+  ggplot(aes(age)) +
+  geom_histogram(binwidth = 10, fill = "seagreen2") +
+  theme_minimal() +
+  labs(title = "Histogram of Age",
+       x = "Age",
+       y = "Counts")
+```
+
+
+#### Distribution of Survival Time in Days
+
+```{r Histogram - Survival Time in Days}
+lung_data %>%
+  ggplot(aes(time)) +
+  geom_histogram(binwidth = 10, fill = "peachpuff2") +
+  theme_minimal() +
+  labs(title = "Histogram of Survival time",
+       x = "Survival Time in Days",
+       y = "Counts")
+```
+
+
+#### Distribution of Karnofsky Performance Score by Physician
+
+```{r Histogram - Karnofsky Performance Score - by Physician}
+lung_data %>%
+  ggplot(aes(ph.karno)) +
+  geom_histogram(binwidth = 10, fill = "mistyrose3") +
+  theme_minimal() +
+  labs(title = "Histogram of Karnofsky Performance Score by Physician",
+       x = "Karnofsky Performance Score",
+       y = "Counts")
+```
+
+#### Distribution of Karnofsky Performance Score by Patient
+
+```{r Histogram - Karnofsky Performance Score - by Patient}
+lung_data %>%
+  ggplot(aes(pat.karno)) +
+  geom_histogram(binwidth = 10, fill = "lightpink2") +
+  theme_minimal() +
+  labs(title = "Histogram of Karnofsky Performance Score by Patient",
+       x = "Karnofsky Performance Score",
+       y = "Counts")
+```
+
+#### Distribution of Calories consumed at meals
+
+```{r Histogram - Calories consumed at meals}
+lung_data %>%
+  ggplot(aes(meal.cal)) +
+  geom_histogram(binwidth = 10, fill = "maroon4") +
+  theme_minimal() +
+  labs(title = "Histogram of Caloreis consumed at meals",
+       x = "Calories Consumed",
+       y = "Counts")
+```
+
+#### Distribution of Weight loss in last six month (pounds)
+
+```{r Histogram - Weigth Loss}
+lung_data %>%
+  ggplot(aes(pat.karno)) +
+  geom_histogram(binwidth = 10, fill = "chocolate3") +
+  theme_minimal() +
+  labs(title = "Histogram of Weight Loss in last Six Month (Pounds)",
+       x = "Weight Loss",
+       y = "Counts")
+```
+
+
+
+Distill is a publication format for scientific and technical writing, native to the web.
+
+Learn more about using Distill at <https://rstudio.github.io/distill>.
+
+

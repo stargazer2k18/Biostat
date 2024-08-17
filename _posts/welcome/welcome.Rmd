@@ -1,0 +1,42 @@
+---
+title: "My Journey into the World of Biostatistics"
+description: |
+  A journey fueled by curiosity, transforming my passion for data into a career in biostatistics, where I analyze complex health data to drive impactful, evidence-based decisions in public health.
+author:
+  - name: Prasanth Kumar 
+    url: https://www.linkedin.com/in/prasanthkumar28/
+date: 08-17-2024
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+# Welcome to My Biostatistics Journey
+
+Hello and welcome to my corner of the digital world! I'm thrilled to have you here.
+
+As an aspiring Biostatistician, I'm on a mission to transform complex data into actionable insights that can make a real difference in healthcare and biological research. This blog is where I'll share my journey, discoveries, and thoughts on the fascinating intersection of statistics and health.
+
+## What You'll Find Here
+
+- Insights from my latest data analysis projects
+- Explorations of statistical methods in healthcare
+- Reflections on my academic and professional experiences
+- Tips and tutorials on tools like R, R Shiny, R Packages, SQL, and Python
+- Discussions on the latest trends in biostatistics and public health
+
+## A Bit About Me
+
+I hold a Master's degree in Statistics and have a passion for using data to solve real-world problems. From analyzing Complete Blood Count datasets to developing predictive models for fertility outcomes in PCOS patients, I'm always eager to dive into complex healthcare data.
+
+When I'm not crunching numbers, you might find me creating interactive Shiny apps, volunteering for community surveys, or exploring new ways to visualize data.
+
+## Let's Connect
+
+I believe in the power of collaboration and community. Whether you're a fellow data enthusiast, a healthcare professional, or simply curious about the world of biostatistics, I'd love to hear from you. Feel free to reach out with questions, ideas, or opportunities to collaborate.
+
+Thank you for stopping by. I hope you'll join me on this exciting journey of discovery and innovation in biostatistics!
+
+Stay curious and keep analyzing,
+
+Prasanth Kumar.
