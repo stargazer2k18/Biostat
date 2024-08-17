@@ -32,5 +32,22 @@
     "preview": "posts/2024-08-17-lungs-data-eda-and-data-visualization-in-r/lungs-data-eda-and-data-visualization-in-r_files/figure-html5/Histogram - Age-1.png",
     "last_modified": "2024-08-17T14:58:41+05:30",
     "input_file": "lungs-data-eda-and-data-visualization-in-r.knit.md"
+  },
+  {
+    "path": "posts/2024-08-17-my-third-post/",
+    "title": "my third post",
+    "description": "A short description of the post.",
+    "author": [
+      {
+        "name": "Prasanth Kumar",
+        "url": "https://www.linkedin.com/in/prasanthkumar28/"
+      }
+    ],
+    "date": "2024-08-17",
+    "categories": [],
+    "contents": "\r\nDistill is a publication format for scientific and technical writing, native to the web.\r\nLearn more about using Distill at https://rstudio.github.io/distill.\r\n\r\n\r\n\r\n",
+    "preview": {},
+    "last_modified": "2024-08-17T15:01:49+05:30",
+    "input_file": "my-third-post.knit.md"
   }
 ]
