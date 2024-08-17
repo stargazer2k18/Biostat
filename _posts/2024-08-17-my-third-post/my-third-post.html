@@ -1550,7 +1550,12 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <p>Loading several essential libraries, including “tidyverse”. These libraries offer diverse functionalities for data manipulation, visualization, and reporting.</p>
 <p>And also we need the “survival” package for the NCCTG Lung Cancer data set in it, for graphical representation “survminer” package is used.</p>
 <div class="layout-chunk" data-layout="l-body">
-
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span></span>
+<span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/therneau/survival'>survival</a></span><span class='op'>)</span></span>
+<span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://rpkgs.datanovia.com/survminer/index.html'>survminer</a></span><span class='op'>)</span></span>
+<span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://yihui.org/knitr/'>knitr</a></span><span class='op'>)</span></span></code></pre>
+</div>
 </div>
 <h2 id="data-description">Data Description</h2>
 <h3 id="ncctg-lung-cancer-data">NCCTG Lung Cancer Data</h3>
@@ -1567,6 +1572,10 @@ pat.karno: Karnofsky performance score as rated by patient.<br />
 meal.cal: Calories consumed at meals.<br />
 wt.loss: Weight loss in last six months (pounds).</p>
 <div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>lung_data</span> <span class='op'>&lt;-</span> <span class='va'>lung</span> </span>
+<span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>lung_data</span><span class='op'>)</span><span class='op'>)</span></span></code></pre>
+</div>
 <table>
 <colgroup>
 <col style="width: 7%" />
@@ -1672,21 +1681,54 @@ wt.loss: Weight loss in last six months (pounds).</p>
 </div>
 <h2 id="data-cleaning">Data Cleaning</h2>
 <div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>lung_data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/na.fail.html'>na.omit</a></span><span class='op'>(</span><span class='va'>lung_data</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/base/colSums.html'>colSums</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>lung_data</span><span class='op'>)</span><span class='op'>)</span></span></code></pre>
+</div>
 <pre><code>     inst      time    status       age       sex   ph.ecog  ph.karno 
         0         0         0         0         0         0         0 
 pat.karno  meal.cal   wt.loss 
         0         0         0 </code></pre>
 </div>
 <h2 id="survival-analysis">Survival Analysis</h2>
-<h2 id="kaplan-meier-curve">Kaplan-Meier Curve</h2>
-In this analysis, we use the Kaplan-Meier curve to visualize the overall survival probability of patients in the dataset. It provides a visual representation of survival probability over time, where each step down in the curve indicates an event(e.g., death).
+<h3 id="kaplan-meier-curve">Kaplan-Meier Curve</h3>
+<p>In this analysis, we use the Kaplan-Meier curve to visualize the overall survival probability of patients in the dataset. It provides a visual representation of survival probability over time, where each step down in the curve indicates an event (e.g., death).</p>
 <div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># Survival Object</span></span>
+<span><span class='va'>surv_obj</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span><span class='op'>(</span>time <span class='op'>=</span> <span class='va'>lung_data</span><span class='op'>$</span><span class='va'>time</span>, event <span class='op'>=</span> <span class='va'>lung_data</span><span class='op'>$</span><span class='va'>status</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='co'># Fit the Kaplan_Meier Model</span></span>
+<span><span class='va'>fit</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span><span class='op'>(</span><span class='va'>surv_obj</span> <span class='op'>~</span> <span class='fl'>1</span>, data <span class='op'>=</span> <span class='va'>lung_data</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='co'># Plot the Kaplan - Meier Curve </span></span>
+<span><span class='fu'><a href='https://rdrr.io/pkg/survminer/man/ggsurvplot.html'>ggsurvplot</a></span><span class='op'>(</span><span class='va'>fit</span>, data <span class='op'>=</span> <span class='va'>lung_data</span>,</span>
+<span>           xlab <span class='op'>=</span> <span class='st'>"Time in Days"</span>,</span>
+<span>           ylab <span class='op'>=</span> <span class='st'>"Surivial Probability"</span>,</span>
+<span>           title <span class='op'>=</span> <span class='st'>"Kaplan-Meier Survival Curve"</span>,</span>
+<span>           conf.int <span class='op'>=</span> <span class='cn'>T</span>, <span class='co'># Confidence Interval</span></span>
+<span>           ggtheme <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_minimal</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># Minimal Theme</span></span></code></pre>
+</div>
 <p><img src="my-third-post_files/figure-html5/KM%20Curve-1.png" width="624" /></p>
 </div>
-<h2 id="kaplan-meier-curve-by-sex">Kaplan-Meier Curve by Sex</h2>
+<h3 id="kaplan-meier-curve-by-sex">Kaplan-Meier Curve by Sex</h3>
 <p>We stratify the Kaplan-Meier Curve by the ‘sex’ variable, dividing the data into male and female patients. While the overall KM Curve is informative, survival probabilities can vary significantly between different subgroups within the data.</p>
 <p>Such comparisons are crucial for understanding the impact of demographic or clinical variables on Survival outcomes.</p>
 <div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>fit_s</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span><span class='op'>(</span><span class='va'>surv_obj</span> <span class='op'>~</span> <span class='va'>sex</span>, data <span class='op'>=</span> <span class='va'>lung_data</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='co'># Plot the Kaplan - Meier Curve </span></span>
+<span><span class='fu'><a href='https://rdrr.io/pkg/survminer/man/ggsurvplot.html'>ggsurvplot</a></span><span class='op'>(</span><span class='va'>fit_s</span>, data <span class='op'>=</span> <span class='va'>lung_data</span>,</span>
+<span>           xlab <span class='op'>=</span> <span class='st'>"Time in Days"</span>,</span>
+<span>           ylab <span class='op'>=</span> <span class='st'>"Surivial Probability"</span>,</span>
+<span>           title <span class='op'>=</span> <span class='st'>"Kaplan-Meier Survival Curve by Sex"</span>,</span>
+<span>           conf.int <span class='op'>=</span> <span class='cn'>T</span>, <span class='co'># Confidence Interval</span></span>
+<span>           ggtheme <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_minimal</a></span><span class='op'>(</span><span class='op'>)</span>, <span class='co'># Minimal Theme</span></span>
+<span>           palette <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"palegreen"</span>, <span class='st'>"pink"</span><span class='op'>)</span>,<span class='co'># Set colors for the curvers</span></span>
+<span>           legend.labs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Male"</span>, <span class='st'>"Female"</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># Label the Legend </span></span></code></pre>
+</div>
 <p><img src="my-third-post_files/figure-html5/KM%20Curve%20-%20Sex-1.png" width="624" /></p>
 </div>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>

@@ -17,23 +17,6 @@
     "input_file": {}
   },
   {
-    "path": "posts/2024-08-17-my-third-post/",
-    "title": "Lung Cancer Data || Kaplan-Meier Curve || R",
-    "description": "The Kaplan-Meier curve visualizes survival probabilities over time, helping to identify survival trends and the impact of variables like sex on outcomes, crucial for understanding lung cancer progression.",
-    "author": [
-      {
-        "name": "Prasanth Kumar",
-        "url": "https://www.linkedin.com/in/prasanthkumar28/"
-      }
-    ],
-    "date": "2024-08-17",
-    "categories": [],
-    "contents": "\r\nSetup Chunks in RMarkdown\r\nLoading Required Libraries\r\nLoading several essential libraries, including “tidyverse”. These libraries offer diverse functionalities for data manipulation, visualization, and reporting.\r\nAnd also we need the “survival” package for the NCCTG Lung Cancer data set in it, for graphical representation “survminer” package is used.\r\n\r\n\r\n\r\nData Description\r\nNCCTG Lung Cancer Data\r\nSurvival in patients with advanced lung cancer from the North Central Cancer Treatment Group. Performance scores rate how well the patient can perform usual daily activities.\r\nFormat\r\ninst: Institution code.\r\ntime: Survival time in days.\r\nstatus: censoring status 1=censored, 2=dead.\r\nage: Age in years.\r\nsex: Male=1 Female=2.\r\nph.ecog: ECOG performance score as rated by the physician. 0=asymptomatic, 1= symptomatic but completely ambulatory, 2= in bed <50% of the day, 3= in bed > 50% of the day but not bedbound, 4 = bedbound.\r\nph.karno: Karnofsky performance score (bad=0-good=100) rated by physician.\r\npat.karno: Karnofsky performance score as rated by patient.\r\nmeal.cal: Calories consumed at meals.\r\nwt.loss: Weight loss in last six months (pounds).\r\n\r\ninst\r\ntime\r\nstatus\r\nage\r\nsex\r\nph.ecog\r\nph.karno\r\npat.karno\r\nmeal.cal\r\nwt.loss\r\n3\r\n306\r\n2\r\n74\r\n1\r\n1\r\n90\r\n100\r\n1175\r\nNA\r\n3\r\n455\r\n2\r\n68\r\n1\r\n0\r\n90\r\n90\r\n1225\r\n15\r\n3\r\n1010\r\n1\r\n56\r\n1\r\n0\r\n90\r\n90\r\nNA\r\n15\r\n5\r\n210\r\n2\r\n57\r\n1\r\n1\r\n90\r\n60\r\n1150\r\n11\r\n1\r\n883\r\n2\r\n60\r\n1\r\n0\r\n100\r\n90\r\nNA\r\n0\r\n12\r\n1022\r\n1\r\n74\r\n1\r\n1\r\n50\r\n80\r\n513\r\n0\r\n\r\nData Cleaning\r\n\r\n     inst      time    status       age       sex   ph.ecog  ph.karno \r\n        0         0         0         0         0         0         0 \r\npat.karno  meal.cal   wt.loss \r\n        0         0         0 \r\n\r\nSurvival Analysis\r\nKaplan-Meier Curve\r\nIn this analysis, we use the Kaplan-Meier curve to visualize the overall survival probability of patients in the dataset. It provides a visual representation of survival probability over time, where each step down in the curve indicates an event(e.g., death).\r\n\r\n\r\n\r\nKaplan-Meier Curve by Sex\r\nWe stratify the Kaplan-Meier Curve by the ‘sex’ variable, dividing the data into male and female patients. While the overall KM Curve is informative, survival probabilities can vary significantly between different subgroups within the data.\r\nSuch comparisons are crucial for understanding the impact of demographic or clinical variables on Survival outcomes.\r\n\r\n\r\n\r\n\r\n\r\n\r\n",
-    "preview": "posts/2024-08-17-my-third-post/my-third-post_files/figure-html5/KM Curve-1.png",
-    "last_modified": "2024-08-17T19:55:29+05:30",
-    "input_file": "my-third-post.knit.md"
-  },
-  {
     "path": "posts/2024-08-17-lungs-data-eda-and-data-visualization-in-r/",
     "title": "Lungs Cancer Data || EDA and Data Visualization || R",
     "description": "Explored and visualized lungs data in R, performing EDA to uncover patterns and trends. Utilized R packages for effective data visualization, providing insights into respiratory health indicators.",
@@ -49,5 +32,22 @@
     "preview": "posts/2024-08-17-lungs-data-eda-and-data-visualization-in-r/lungs-data-eda-and-data-visualization-in-r_files/figure-html5/Histogram - Age-1.png",
     "last_modified": "2024-08-17T19:56:36+05:30",
     "input_file": "lungs-data-eda-and-data-visualization-in-r.knit.md"
+  },
+  {
+    "path": "posts/2024-08-17-my-third-post/",
+    "title": "Lung Cancer Data || Kaplan-Meier Curve || R",
+    "description": "The Kaplan-Meier curve visualizes survival probabilities over time, helping to identify survival trends and the impact of variables like sex on outcomes, crucial for understanding lung cancer progression.",
+    "author": [
+      {
+        "name": "Prasanth Kumar",
+        "url": "https://www.linkedin.com/in/prasanthkumar28/"
+      }
+    ],
+    "date": "2024-08-17",
+    "categories": [],
+    "contents": "\r\nSetup Chunks in RMarkdown\r\nLoading Required Libraries\r\nLoading several essential libraries, including “tidyverse”. These libraries offer diverse functionalities for data manipulation, visualization, and reporting.\r\nAnd also we need the “survival” package for the NCCTG Lung Cancer data set in it, for graphical representation “survminer” package is used.\r\n\r\n\r\nlibrary(tidyverse)\r\nlibrary(survival)\r\nlibrary(survminer)\r\nlibrary(knitr)\r\n\r\n\r\nData Description\r\nNCCTG Lung Cancer Data\r\nSurvival in patients with advanced lung cancer from the North Central Cancer Treatment Group. Performance scores rate how well the patient can perform usual daily activities.\r\nFormat\r\ninst: Institution code.\r\ntime: Survival time in days.\r\nstatus: censoring status 1=censored, 2=dead.\r\nage: Age in years.\r\nsex: Male=1 Female=2.\r\nph.ecog: ECOG performance score as rated by the physician. 0=asymptomatic, 1= symptomatic but completely ambulatory, 2= in bed <50% of the day, 3= in bed > 50% of the day but not bedbound, 4 = bedbound.\r\nph.karno: Karnofsky performance score (bad=0-good=100) rated by physician.\r\npat.karno: Karnofsky performance score as rated by patient.\r\nmeal.cal: Calories consumed at meals.\r\nwt.loss: Weight loss in last six months (pounds).\r\n\r\n\r\nlung_data <- lung \r\nkable(head(lung_data))\r\n\r\ninst\r\ntime\r\nstatus\r\nage\r\nsex\r\nph.ecog\r\nph.karno\r\npat.karno\r\nmeal.cal\r\nwt.loss\r\n3\r\n306\r\n2\r\n74\r\n1\r\n1\r\n90\r\n100\r\n1175\r\nNA\r\n3\r\n455\r\n2\r\n68\r\n1\r\n0\r\n90\r\n90\r\n1225\r\n15\r\n3\r\n1010\r\n1\r\n56\r\n1\r\n0\r\n90\r\n90\r\nNA\r\n15\r\n5\r\n210\r\n2\r\n57\r\n1\r\n1\r\n90\r\n60\r\n1150\r\n11\r\n1\r\n883\r\n2\r\n60\r\n1\r\n0\r\n100\r\n90\r\nNA\r\n0\r\n12\r\n1022\r\n1\r\n74\r\n1\r\n1\r\n50\r\n80\r\n513\r\n0\r\n\r\nData Cleaning\r\n\r\n\r\nlung_data <- na.omit(lung_data)\r\n\r\ncolSums(is.na(lung_data))\r\n\r\n     inst      time    status       age       sex   ph.ecog  ph.karno \r\n        0         0         0         0         0         0         0 \r\npat.karno  meal.cal   wt.loss \r\n        0         0         0 \r\n\r\nSurvival Analysis\r\nKaplan-Meier Curve\r\nIn this analysis, we use the Kaplan-Meier curve to visualize the overall survival probability of patients in the dataset. It provides a visual representation of survival probability over time, where each step down in the curve indicates an event (e.g., death).\r\n\r\n\r\n# Survival Object\r\nsurv_obj <- Surv(time = lung_data$time, event = lung_data$status)\r\n\r\n# Fit the Kaplan_Meier Model\r\nfit <- survfit(surv_obj ~ 1, data = lung_data)\r\n\r\n# Plot the Kaplan - Meier Curve \r\nggsurvplot(fit, data = lung_data,\r\n           xlab = \"Time in Days\",\r\n           ylab = \"Surivial Probability\",\r\n           title = \"Kaplan-Meier Survival Curve\",\r\n           conf.int = T, # Confidence Interval\r\n           ggtheme = theme_minimal()) # Minimal Theme\r\n\r\n\r\n\r\nKaplan-Meier Curve by Sex\r\nWe stratify the Kaplan-Meier Curve by the ‘sex’ variable, dividing the data into male and female patients. While the overall KM Curve is informative, survival probabilities can vary significantly between different subgroups within the data.\r\nSuch comparisons are crucial for understanding the impact of demographic or clinical variables on Survival outcomes.\r\n\r\n\r\nfit_s <- survfit(surv_obj ~ sex, data = lung_data)\r\n\r\n# Plot the Kaplan - Meier Curve \r\nggsurvplot(fit_s, data = lung_data,\r\n           xlab = \"Time in Days\",\r\n           ylab = \"Surivial Probability\",\r\n           title = \"Kaplan-Meier Survival Curve by Sex\",\r\n           conf.int = T, # Confidence Interval\r\n           ggtheme = theme_minimal(), # Minimal Theme\r\n           palette = c(\"palegreen\", \"pink\"),# Set colors for the curvers\r\n           legend.labs = c(\"Male\", \"Female\")) # Label the Legend \r\n\r\n\r\n\r\n\r\n\r\n\r\n",
+    "preview": "posts/2024-08-17-my-third-post/my-third-post_files/figure-html5/KM Curve-1.png",
+    "last_modified": "2024-08-17T20:03:40+05:30",
+    "input_file": "my-third-post.knit.md"
   }
 ]
