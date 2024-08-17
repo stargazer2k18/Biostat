@@ -1,23 +1,110 @@
 ---
-title: "my third post"
+title: "Lung Cancer Data || Kaplan-Meier Curve || R"
 description: |
-  A short description of the post.
+  The Kaplan-Meier curve visualizes survival probabilities over time, helping to identify survival trends and the impact of variables like sex on outcomes, crucial for understanding lung cancer progression.
 author:
   - name: Prasanth Kumar
     url: https://www.linkedin.com/in/prasanthkumar28/
-date: 2024-08-17
+date: 08-17-2024
 output:
   distill::distill_article:
     self_contained: false
+    df_print: kable
 ---
 
+## Setup Chunks in RMarkdown
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+```{r Chunk Setup, include=FALSE}
+knitr::opts_chunk$set(comment = "", message = FALSE, warning =FALSE,
+                      echo = FALSE)
 ```
 
-Distill is a publication format for scientific and technical writing, native to the web.
 
-Learn more about using Distill at <https://rstudio.github.io/distill>.
+## Loading Required Libraries
 
+ Loading several essential libraries, including "tidyverse". These libraries offer diverse functionalities for data manipulation, visualization, and reporting.
+
+ And also we need the "survival" package for the NCCTG Lung Cancer data set in it, for graphical representation "survminer" package is used.
+ 
+```{r Library}
+library(tidyverse)
+library(survival)
+library(survminer)
+library(knitr)
+```
+
+
+## Data Description 
+
+### NCCTG Lung Cancer Data
+
+Survival in patients with advanced lung cancer from the North Central Cancer Treatment Group. Performance scores rate how well the patient can perform usual daily activities.
+
+
+### Format 
+
+inst:	Institution code.  
+time:	Survival time in days.  
+status:	censoring status 1=censored, 2=dead.  
+age:	Age in years.  
+sex:	Male=1 Female=2.  
+ph.ecog:	ECOG performance score as rated by the physician. 0=asymptomatic, 1= symptomatic but completely ambulatory, 2= in bed <50% of the day, 3= in bed > 50% of the day but not bedbound, 4 = bedbound.  
+ph.karno:	Karnofsky performance score (bad=0-good=100) rated by physician.    
+pat.karno:	Karnofsky performance score as rated by patient.    
+meal.cal:	Calories consumed at meals.  
+wt.loss:	Weight loss in last six months (pounds).  
+
+```{r Lung Dataset}
+lung_data <- lung 
+kable(head(lung_data))
+```
+
+
+## Data Cleaning 
+
+```{r Data Cleaning}
+lung_data <- na.omit(lung_data)
+
+colSums(is.na(lung_data))
+```
+
+## Survival Analysis
+
+## Kaplan-Meier Curve
+  
+  In this analysis, we use the Kaplan-Meier curve to visualize the overall survival probability of patients in the dataset. It provides a visual representation of survival probability over time, where each step down in the curve indicates an event(e.g., death).
+```{r KM Curve}
+# Survival Object
+surv_obj <- Surv(time = lung_data$time, event = lung_data$status)
+
+# Fit the Kaplan_Meier Model
+fit <- survfit(surv_obj ~ 1, data = lung_data)
+
+# Plot the Kaplan - Meier Curve 
+ggsurvplot(fit, data = lung_data,
+           xlab = "Time in Days",
+           ylab = "Surivial Probability",
+           title = "Kaplan-Meier Survival Curve",
+           conf.int = T, # Confidence Interval
+           ggtheme = theme_minimal()) # Minimal Theme
+```
+
+## Kaplan-Meier Curve by Sex
+ We stratify the Kaplan-Meier Curve by the 'sex' variable, dividing the data into male and female patients. While the overall KM Curve is informative, survival probabilities can vary significantly between different subgroups within the data. 
+ 
+ Such comparisons are crucial for understanding the impact of demographic or clinical variables on Survival outcomes.
+ 
+```{r KM Curve - Sex}
+fit_s <- survfit(surv_obj ~ sex, data = lung_data)
+
+# Plot the Kaplan - Meier Curve 
+ggsurvplot(fit_s, data = lung_data,
+           xlab = "Time in Days",
+           ylab = "Surivial Probability",
+           title = "Kaplan-Meier Survival Curve by Sex",
+           conf.int = T, # Confidence Interval
+           ggtheme = theme_minimal(), # Minimal Theme
+           palette = c("palegreen", "pink"),# Set colors for the curvers
+           legend.labs = c("Male", "Female")) # Label the Legend 
+```
 

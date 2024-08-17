@@ -1,5 +1,5 @@
 ---
-title: "Lungs Data - EDA and Data Visualization in R"
+title: "Lungs Cancer Data || EDA and Data Visualization || R"
 description: |
   Explored and visualized lungs data in R, performing EDA to uncover patterns and trends. Utilized R packages for effective data visualization, providing insights into respiratory health indicators.
 author:
@@ -17,7 +17,7 @@ output:
 
 ```{r Chunk Setup, include=FALSE}
 knitr::opts_chunk$set(comment = "", message = FALSE, warning =FALSE,
-                      echo = FALSE)
+                      echo = TRUE)
 ```
 
 ## Loading Required Libraries
@@ -25,13 +25,11 @@ knitr::opts_chunk$set(comment = "", message = FALSE, warning =FALSE,
  Loading several essential libraries, including "tidyverse", "highcharter". These libraries offer diverse functionalities for data manipulation, visualization, and reporting.
 
  And also we need the "survival" package for the NCCTG Lung Cancer data set in it.
- and to save the cleaned data to the directory we need "openxlsx" package 
  
 ```{r Library}
 library(tidyverse)
 library(highcharter)
 library(survival)
-library(openxlsx)
 library(knitr)
 ```
 
@@ -100,7 +98,7 @@ The dataset contains missing values in columns:
 colSums(is.na(lung_data))
 ```
  
- The Lung data set has some missing in it.
+ The Lung data set has some missing values in it.
  
 ## Data Cleaning
  
