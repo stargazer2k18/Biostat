@@ -1,5 +1,5 @@
 ---
-title: "Lungs Cancer Data || EDA and Data Visualization || R"
+title: "Lung Cancer Data || EDA and Data Visualization || R"
 description: |
   Explored and visualized lungs data in R, performing EDA to uncover patterns and trends. Utilized R packages for effective data visualization, providing insights into respiratory health indicators.
 author:
